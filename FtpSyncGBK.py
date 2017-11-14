@@ -1,7 +1,7 @@
-#coding=utf-8
+#coding=gbk
 
 '''
-    ftpè‡ªåŠ¨ä¸‹è½½ã€è‡ªåŠ¨ä¸Šä¼ è„šæœ¬ï¼Œå¯ä»¥é€’å½’ç›®å½•æ“ä½œ
+    ftp×Ô¶¯ÏÂÔØ¡¢×Ô¶¯ÉÏ´«½Å±¾£¬¿ÉÒÔµİ¹éÄ¿Â¼²Ù×÷
 '''
 
 from ftplib import FTP
@@ -28,19 +28,19 @@ class SYNCFTP:
             timeout = 60
             socket.setdefaulttimeout(timeout)
             ftp.set_pasv(True)
-            print('å¼€å§‹è¿æ¥åˆ° %s' % (self.hostaddr))
+            print('¿ªÊ¼Á¬½Óµ½ %s' % (self.hostaddr))
             ftp.connect(self.hostaddr, self.port)
-            print('æˆåŠŸè¿æ¥åˆ° %s' % (self.hostaddr))
-            print('å¼€å§‹ç™»å½•åˆ° %s' % (self.hostaddr))
+            print('³É¹¦Á¬½Óµ½ %s' % (self.hostaddr))
+            print('¿ªÊ¼µÇÂ¼µ½ %s' % (self.hostaddr))
             ftp.login(self.username, self.password)
-            print('æˆåŠŸç™»å½•åˆ° %s' % (self.hostaddr))
+            print('³É¹¦µÇÂ¼µ½ %s' % (self.hostaddr))
             print(ftp.getwelcome())
         except Exception:
-            deal_error("è¿æ¥æˆ–ç™»å½•å¤±è´¥")
+            deal_error("Á¬½Ó»òµÇÂ¼Ê§°Ü")
         try:
             ftp.cwd(self.remotedir)
         except(Exception):
-            deal_error('åˆ‡æ¢ç›®å½•å¤±è´¥')
+            deal_error('ÇĞ»»Ä¿Â¼Ê§°Ü')
 
     def is_same_size(self, localfile, remotefile):
         try:
@@ -59,10 +59,10 @@ class SYNCFTP:
 
     def download_file(self, localfile, remotefile):
         if self.is_same_size(localfile, remotefile):
-            print('%s æ–‡ä»¶å¤§å°ç›¸åŒï¼Œæ— éœ€ä¸‹è½½' % localfile)
+            print('%s ÎÄ¼ş´óĞ¡ÏàÍ¬£¬ÎŞĞèÏÂÔØ' % localfile)
             return
 
-        print('>>>>>>>>>>>>ä¸‹è½½æ–‡ä»¶ %s ... ...' % localfile)
+        print('>>>>>>>>>>>>ÏÂÔØÎÄ¼ş %s ... ...' % localfile)
         file_handler = open(localfile, 'wb')
         self.ftp.retrbinary('RETR %s' % (remotefile), file_handler.write)
         file_handler.close()
@@ -71,11 +71,11 @@ class SYNCFTP:
         try:
             self.ftp.cwd(remotedir)
         except:
-            print('ç›®å½•%sä¸å­˜åœ¨ï¼Œç»§ç»­...' % remotedir)
+            print('Ä¿Â¼%s²»´æÔÚ£¬¼ÌĞø...' % remotedir)
             return
         if not os.path.isdir(localdir):
             os.makedirs(localdir)
-        print('åˆ‡æ¢è‡³ç›®å½• %s' % self.ftp.pwd())
+        print('ÇĞ»»ÖÁÄ¿Â¼ %s' % self.ftp.pwd())
         self.file_list = []
         self.ftp.dir(self.get_file_list)
         remotenames = self.file_list
@@ -89,18 +89,18 @@ class SYNCFTP:
             elif filetype == '-':
                 self.download_file(local, filename)
         self.ftp.cwd('..')
-        print('è¿”å›ä¸Šå±‚ç›®å½• %s' % self.ftp.pwd())
+        print('·µ»ØÉÏ²ãÄ¿Â¼ %s' % self.ftp.pwd())
 
     def upload_file(self, localfile, remotefile):
         if not os.path.isfile(localfile):
             return
         if self.is_same_size(localfile, remotefile):
-            print('è·³è¿‡[ç›¸ç­‰]: %s' % localfile)
+            print('Ìø¹ı[ÏàµÈ]: %s' % localfile)
             return
         file_handler = open(localfile, 'rb')
         self.ftp.storbinary('STOR %s' % remotefile, file_handler)
         file_handler.close()
-        print('å·²ä¼ é€: %s' % localfile)
+        print('ÒÑ´«ËÍ: %s' % localfile)
 
     def upload_files(self, localdir='./', remotedir='./'):
         if not os.path.isdir(localdir):
@@ -113,7 +113,7 @@ class SYNCFTP:
                 try:
                     self.ftp.mkd(item)
                 except:
-                    print('ç›®å½•å·²å­˜åœ¨ %s' % item)
+                    print('Ä¿Â¼ÒÑ´æÔÚ %s' % item)
                 self.upload_files(src, item)
             else:
                 self.upload_file(src, item)
@@ -139,32 +139,32 @@ def timenow():
 
 
 def deal_error(e):
-    logstr = '%s å‘ç”Ÿé”™è¯¯: %s\n' % (timenow(), e)
+    logstr = '%s ·¢Éú´íÎó: %s\n' % (timenow(), e)
     print(logstr)
     file.write(logstr)
     sys.exit()
 
 
 if __name__ == '__main__':
-    file = open("log.txt", "a", encoding= 'utf8')
+    file = open("log.txt", "a")
     logstr = timenow()
-    # é…ç½®å¦‚ä¸‹å˜é‡
-    hostaddr = '192.168.1.203'  # ftpåœ°å€
-    username = 'bsfile'  # ç”¨æˆ·å
-    password = '111111'  # å¯†ç 
-    port = 21  # ç«¯å£å·
-    rootdir_local = '.' + os.sep + 'bak/'  # æœ¬åœ°ç›®å½•
-    rootdir_remote = './'  # è¿œç¨‹ç›®å½•
+    # ÅäÖÃÈçÏÂ±äÁ¿
+    hostaddr = '192.168.1.203'  # ftpµØÖ·
+    username = 'bsfile'  # ÓÃ»§Ãû
+    password = '111111'  # ÃÜÂë
+    port = 21  # ¶Ë¿ÚºÅ
+    rootdir_local = '.' + os.sep + 'bak/'  # ±¾µØÄ¿Â¼
+    rootdir_remote = './'  # Ô¶³ÌÄ¿Â¼
 
     f = SYNCFTP(hostaddr, username, password, rootdir_remote, port)
     f.login()
 
-    # å…ˆä¸Šä¼ ,åä¸‹è½½ï¼Œé‡åˆ°åŒåä¸”æ–‡ä»¶å¤§å°ä¸åŒçš„æ–‡ä»¶ä»¥æœ¬åœ°ä¸ºå‡†
+    # ÏÈÉÏ´«,ºóÏÂÔØ£¬Óöµ½Í¬ÃûÇÒÎÄ¼ş´óĞ¡²»Í¬µÄÎÄ¼şÒÔ±¾µØÎª×¼
     f.upload_files(rootdir_local, rootdir_remote)
     f.download_files(rootdir_local, rootdir_remote)
 
 
-    logstr += " ~ %s åŒæ­¥å®Œæˆ\n" % timenow()
+    logstr += " ~ %s Í¬²½Íê³É\n" % timenow()
     print(logstr)
 
     file.write(logstr)
