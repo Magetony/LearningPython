@@ -82,7 +82,7 @@ class SYNCFTP:
 
         for item in remotenames:
             filetype = item[0]
-            filename = item[1]
+            filename = item[1].decode('utf8').encode('gbk')
             local = os.path.join(localdir, filename)
             if filetype == 'd':
                 self.download_files(local, filename)
@@ -108,7 +108,7 @@ class SYNCFTP:
         localnames = os.listdir(localdir)
         self.ftp.cwd(remotedir)
         for item in localnames:
-            src = os.path.join(localdir, item)
+            src = os.path.join(localdir, item).decode('gbk').encode('utf8')
             if os.path.isdir(src):
                 try:
                     self.ftp.mkd(item)
