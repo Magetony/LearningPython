@@ -146,23 +146,22 @@ def deal_error(e):
 
 
 if __name__ == '__main__':
-    file = open("log.txt", "a", encoding= 'utf8')
+    file = open("log.txt", "a")
     logstr = timenow()
     # 配置如下变量
-    hostaddr = '192.168.1.203'  # ftp地址
-    username = 'bsfile'  # 用户名
-    password = '111111'  # 密码
+    hostaddr = '192.168.56.101'  # ftp地址
+    username = 'gt'  # 用户名
+    password = '123'  # 密码
     port = 21  # 端口号
-    rootdir_local = '.' + os.sep + 'bak/'  # 本地目录
-    rootdir_remote = './'  # 远程目录
+    # rootdir_local = '.' + os.sep + 'bak/'  # 本地目录
+    rootdir_local = "d:\\Users\\Maget\\Desktop\\data\\"
+    rootdir_remote = '/data'  # 远程目录
 
     f = SYNCFTP(hostaddr, username, password, rootdir_remote, port)
     f.login()
 
-    # 先上传,后下载，遇到同名且文件大小不同的文件以本地为准
-    f.upload_files(rootdir_local, rootdir_remote)
     f.download_files(rootdir_local, rootdir_remote)
-
+    f.upload_files(rootdir_local, rootdir_remote)
 
     logstr += " ~ %s 同步完成\n" % timenow()
     print(logstr)
